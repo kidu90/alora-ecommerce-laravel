@@ -5,7 +5,7 @@
             <li><a href="{{ route('about') }}" class="hover:text-gray-600">About</a></li>
             <li><a href="index.php?route=shop" class="hover:text-gray-600">Shop</a></li>
             <li><a href="index.php?route=contact" class="hover:text-gray-600">Contact</a></li>
-            <li><a href="index.php?route=subscription" class="hover:text-gray-600">Subscription</a></li>
+            <li><a href="{{ route('subscription') }}" class="hover:text-gray-600">Subscription</a></li>
         </ul>
 
         <div class="flex items-center space-x-4">
