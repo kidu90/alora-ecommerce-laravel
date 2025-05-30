@@ -28,7 +28,7 @@
                 <p class="text-xl mb-8">Get monthly curated beauty products</p>
             </div>
             <div class="md:w-1/2">
-                <img src="assets/images/subs2.avif" alt="Beauty subscription box" class="w-full h-auto rounded-lg">
+                <img src="{{ asset('images/subs2.avif') }}" alt="Beauty subscription box" class="w-full h-auto rounded-lg">
             </div>
         </div>
     </section>

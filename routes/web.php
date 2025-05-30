@@ -27,3 +27,25 @@ Route::get('/shop', function () {
 Route::get('/subscription', function () {
     return view('subscription');
 })->name('subscription');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::get('/cart', function () {
+    return view('cart');
+})->name('cart');
+
+Route::get('/products', function () {
+    return view('products');
+})->name('products');
+
+
+
+
+
+
+// Admin routes
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
