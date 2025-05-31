@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('status', ['active', 'paused', 'cancelled'])->default('active');
             $table->timestamps();
 
-            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
+            $table->foreign('plan_id')->references('plan_id')->on('subscriptions')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

@@ -1,6 +1,6 @@
 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
     <div class="relative">
-        <img src="{{ $product->image' }}"
+        <img src="{{ $product->image }}"
             alt="{{ $product->name }}"
             class="w-full h-48 object-cover">
 
@@ -16,7 +16,7 @@
 
     <!-- Rating Stars  -->
     <div class="flex items-center mb-2">
-        <img src=" " alt="Star Icon" class="h-5 w-5">
+        <img src="" alt="Star Icon" class="h-5 w-5">
         <img src="" alt="Star Icon" class="h-5 w-5">
         <img src="" alt="Star Icon" class="h-5 w-5">
         <img src="" alt="Star Icon" class="h-5 w-5">
