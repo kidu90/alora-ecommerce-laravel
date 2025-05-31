@@ -43,10 +43,21 @@ class ProductController extends Controller
         ], 201);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $perPage = $request->get('per_page', 20);
+        $products = Product::with('category')->paginate($perPage);
+
         return response()->json($products);
+    }
+
+    //  method for web view 
+    public function webIndex(Request $request)
+    {
+        $perPage = $request->get('per_page', 20);
+        $products = Product::with('category')->paginate($perPage);
+
+        return view('products', compact('products'));
     }
 
     public function show($id)
@@ -59,6 +70,21 @@ class ProductController extends Controller
 
         return response()->json($product);
     }
+
+
+
+    // method for web view
+    public function webShow($id)
+    {
+        $product = Product::with('category')->find($id);
+
+        if (!$product) {
+            abort(404, 'Product not found');
+        }
+
+        return view('products.show', compact('product'));
+    }
+
 
     public function destroy($id)
     {
