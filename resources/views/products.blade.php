@@ -17,6 +17,9 @@
 
 <body class="font-noto">
     @include('partials.navbar')
+    @include('partials.product_card')
+
+
 
 
 

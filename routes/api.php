@@ -33,9 +33,6 @@ Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 Route::put('/categories/{id}', [CategoryController::class, 'update']);
 
 
-
-
-//web routes
-
-// Route::get('/products/{id}/details', [ProductController::class, 'webShow'])->name('products.show');
-// Route::get('/products', [ProductController::class, 'webIndex'])->name('products.index');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/customer-subscriptions', [CustomerSubscriptionController::class, 'store']);
+});

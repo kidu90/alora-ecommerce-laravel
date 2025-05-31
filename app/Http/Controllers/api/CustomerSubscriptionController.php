@@ -3,47 +3,54 @@
 namespace App\Http\Controllers\api;
 
 use App\Models\CustomerSubscription;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
 class CustomerSubscriptionController extends Controller
 {
+    public function store(Request $request)
+    {
+        $request->validate([
+            'plan_id' => 'required|exists:subscriptions,plan_id',
+            'start_date' => 'required|date',
+            'next_delivery_date' => 'required|date|after_or_equal:start_date',
+            'status' => 'required|in:active,paused,cancelled',
+        ]);
+
+        $subscription = CustomerSubscription::create([
+            'user_id' => Auth::id(),
+            'plan_id' => $request->plan_id,
+            'start_date' => $request->start_date,
+            'next_delivery_date' => $request->next_delivery_date,
+            'status' => $request->status,
+        ]);
+
+        return response()->json(['message' => 'Subscription applied', 'data' => $subscription], 201);
+    }
+
+
     public function index()
     {
-        return CustomerSubscription::with('subscription')->where('user_id', Auth::id())->get();
+        $subscriptions = CustomerSubscription::where('user_id', Auth::id())->get();
+        return response()->json($subscriptions);
     }
 
     public function apply(Request $request)
     {
-        $request->validate([
-            'subscription_id' => 'required|exists:subscriptions,id',
-        ]);
+        return $this->store($request);
+    }
 
-        $subscription = Subscription::findOrFail($request->subscription_id);
-
-        $start_date = now();
-        $next_delivery = now()->addMonths($subscription->duration_months);
-
-        $existing = CustomerSubscription::where('user_id', Auth::id())
-            ->where('subscription_id', $subscription->id)
-            ->where('status', 'active')
-            ->first();
-
-        if ($existing) {
-            return response()->json(['message' => 'You already have an active subscription.'], 400);
+    public function cancel($id)
+    {
+        $subscription = CustomerSubscription::findOrFail($id);
+        if ($subscription->user_id !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $customerSubscription = CustomerSubscription::create([
-            'subscription_id' => $subscription->id,
-            'user_id' => Auth::id(),
-            'plan_id' => $subscription->plan_id,
-            'start_date' => $start_date,
-            'next_delivery_date' => $next_delivery,
-            'status' => 'active',
-        ]);
+        $subscription->status = 'cancelled';
+        $subscription->save();
 
-        return response()->json($customerSubscription, 201);
+        return response()->json(['message' => 'Subscription cancelled successfully']);
     }
 }

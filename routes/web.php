@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,10 +43,13 @@ Route::get('/products', function () {
 
 
 
-
-
-
 // Admin routes
 Route::get('/admin', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
+
+
+
+//web routes for api integration
+
+Route::get('/products', [ProductController::class, 'WebIndex'])->name('products');
