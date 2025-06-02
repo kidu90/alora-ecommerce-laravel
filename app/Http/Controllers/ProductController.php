@@ -5,128 +5,74 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function index()
+    {
+        $products = Product::with('category')->get();
+        return response()->json($products);
+    }
+
+    public function show($id)
+    {
+        $product = Product::with('category')->findOrFail($id);
+        return response()->json($product);
+    }
+
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'ingredients' => 'nullable|string',
             'usage_tips' => 'nullable|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|string',
             'category_id' => 'required|exists:categories,id'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'ingredients' => $request->ingredients,
-            'usage_tips' => $request->usage_tips,
-            'image' => $request->image,
-            'category_id' => $request->category_id,
-        ]);
-
-        return response()->json([
-            'message' => 'Product created successfully!',
-            'product' => $product
-        ], 201);
-    }
-
-    public function index(Request $request)
-    {
-        $perPage = $request->get('per_page', 20);
-        $products = Product::with('category')->paginate($perPage);
-
-        return response()->json($products);
-    }
-
-    //  method for web view 
-    public function webIndex(Request $request)
-    {
-        $perPage = $request->get('per_page', 20);
-        $products = Product::with('category')->paginate($perPage);
-
-        return view('products', compact('products'));
-    }
-
-    public function show($id)
-    {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        return response()->json($product);
-    }
-
-
-
-    // method for web view
-    public function webShow($id)
-    {
-        $product = Product::with('category')->find($id);
-
-        if (!$product) {
-            abort(404, 'Product not found');
-        }
-
-        return view('products.show', compact('product'));
-    }
-
-
-    public function destroy($id)
-    {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        $product->delete();
-
-        return response()->json(['message' => 'Product deleted successfully']);
+        $product = Product::create($request->all());
+        return response()->json($product, 201);
     }
 
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|max:255',
-            'description' => 'sometimes|nullable|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'stock' => 'sometimes|required|integer|min:0',
-            'ingredients' => 'sometimes|nullable|string',
-            'usage_tips' => 'sometimes|nullable|string',
-            'image' => 'sometimes|nullable|url',
-            'category_id' => 'sometimes|required|exists:categories,id'
+        $product = Product::findOrFail($id);
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'ingredients' => 'nullable|string',
+            'usage_tips' => 'nullable|string',
+            'image' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id'
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
 
         $product->update($request->all());
+        return response()->json($product);
+    }
 
-        return response()->json([
-            'message' => 'Product updated successfully!',
-            'product' => $product
-        ]);
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return response()->json(null, 204);
+    }
+
+    // Web routes
+    public function webIndex()
+    {
+        $products = Product::with('category')->get();
+        return view('products', compact('products'));
+    }
+
+    public function webShow($id)
+    {
+        $product = Product::with('category')->findOrFail($id);
+        return view('products.show', compact('product'));
     }
 }

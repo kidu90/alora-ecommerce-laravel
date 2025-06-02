@@ -21,7 +21,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Welcome Section -->
                 <div class="mb-8">
-                    <h1 class="text-2xl font-semibold text-gray-900">Welcome back!</h1>
+                    <h1 class="text-2xl font-semibold text-gray-900">Welcome back, {{ auth()->user()->name }}!</h1>
                     <p class="text-gray-600">Here's what's happening with your account today.</p>
                 </div>
 
@@ -41,7 +41,7 @@
                                             Total Spent
                                         </dt>
                                         <dd class="text-xl font-semibold text-gray-900">
-                                            $2,431.89
+                                            ${{ number_format(auth()->user()->orders()->sum('total_amount'), 2) }}
                                         </dd>
                                     </dl>
                                 </div>
@@ -63,7 +63,7 @@
                                             Total Orders
                                         </dt>
                                         <dd class="text-xl font-semibold text-gray-900">
-                                            24
+                                            {{ auth()->user()->orders()->count() }}
                                         </dd>
                                     </dl>
                                 </div>
@@ -82,10 +82,10 @@
                                 <div class="ml-5 w-0 flex-1">
                                     <dl>
                                         <dt class="text-sm font-medium text-gray-500 truncate">
-                                            Active Subscriptions
+                                            Cart Items
                                         </dt>
                                         <dd class="text-xl font-semibold text-gray-900">
-                                            3
+                                            {{ auth()->user()->carts()->sum('quantity') }}
                                         </dd>
                                     </dl>
                                 </div>
@@ -107,7 +107,7 @@
                                             Pending Orders
                                         </dt>
                                         <dd class="text-xl font-semibold text-gray-900">
-                                            2
+                                            {{ auth()->user()->orders()->whereIn('status', ['pending', 'processing'])->count() }}
                                         </dd>
                                     </dl>
                                 </div>
@@ -116,140 +116,104 @@
                     </div>
                 </div>
 
-                <!-- Order History Table -->
+                <!-- Recent Order History -->
                 <div class="bg-white shadow-sm rounded-lg border border-gray-200 mb-8">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h3 class="text-lg font-semibold text-gray-900">Recent Order History</h3>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-01-15</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Premium Package, Add-ons</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$299.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                            Completed
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-01-10</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Basic Package</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$149.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-amber-100 text-amber-800">
-                                            Processing
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#ORD-003</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-01-05</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Enterprise Package</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$599.99</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                            Completed
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        @php
+                            $recentOrders = auth()->user()->orders()->latest()->take(5)->get();
+                        @endphp
+                        
+                        @if($recentOrders->count() > 0)
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Number</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($recentOrders as $order)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $order->order_number }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $order->created_at->format('M d, Y') }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $order->orderItems->count() }} items</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${{ number_format($order->total_amount, 2) }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                    @if($order->status === 'pending') bg-yellow-100 text-yellow-800
+                                                    @elseif($order->status === 'processing') bg-blue-100 text-blue-800
+                                                    @elseif($order->status === 'shipped') bg-purple-100 text-purple-800
+                                                    @elseif($order->status === 'delivered') bg-emerald-100 text-emerald-800
+                                                    @else bg-red-100 text-red-800
+                                                    @endif">
+                                                    {{ ucfirst($order->status) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <a href="{{ route('orders.show', $order->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <div class="px-6 py-8 text-center">
+                                <p class="text-gray-500">No orders yet. <a href="{{ route('products') }}" class="text-blue-600 hover:text-blue-800">Start shopping!</a></p>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
-                <!-- Subscription History Table -->
-                <div class="bg-white shadow-sm rounded-lg border border-gray-200">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-900">Subscription History</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscription ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Billing</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#SUB-001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Premium Monthly</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-01-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-02-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$29.99/month</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Manage</a>
-                                        <a href="#" class="text-red-600 hover:text-red-800 font-medium">Cancel</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#SUB-002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Basic Annual</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2023-12-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2024-12-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$99.99/year</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Manage</a>
-                                        <a href="#" class="text-red-600 hover:text-red-800 font-medium">Cancel</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#SUB-003</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Enterprise Monthly</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">2023-11-15</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">-</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">$99.99/month</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Cancelled
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">View Details</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="{{ route('products') }}" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Shop Products</h3>
+                                <p class="text-gray-600">Browse our beauty collection</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('cart.index') }}" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m-2.4 0h2.4M7 13L5.4 5H3m4 8v6a2 2 0 002 2h8a2 2 0 002-2v-6m-8 0v6a2 2 0 002 2h4a2 2 0 002-2v-6"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">View Cart</h3>
+                                <p class="text-gray-600">Review your selected items</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('orders.index') }}" class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <svg class="h-8 w-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-medium text-gray-900">Order History</h3>
+                                <p class="text-gray-600">Track your past purchases</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -257,6 +221,5 @@
 
     @include('partials.footer')
 </body>
-
 
 </html>

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,23 +35,38 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/cart', function () {
-    return view('cart');
-})->name('cart');
+// Product routes
+Route::get('/products', [ProductController::class, 'webIndex'])->name('products');
+Route::get('/products/{id}', [ProductController::class, 'webShow'])->name('products.show');
 
-Route::get('/products', function () {
-    return view('products');
-})->name('products');
+// Cart routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::put('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{cart}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
-
+// Order routes (authenticated users only)
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/success', [OrderController::class, 'success'])->name('orders.success');
+});
 
 // Admin routes
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-
-
-
-//web routes for api integration
-
-Route::get('/products', [ProductController::class, 'WebIndex'])->name('products');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Product management
+    Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
+    
+    // Category management
+    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+    
+    // Order management
+    Route::get('orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+    Route::patch('orders/{order}/status', [App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.update-status');
+});
