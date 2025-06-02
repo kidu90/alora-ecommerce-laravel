@@ -10,7 +10,6 @@
         </ul>
 
         <div class="flex items-center">
-            <!-- Cart Icon with Count -->
             <div class="relative">
                 <a href="{{ route('cart.index') }}" class="relative">
                     <svg class="w-6 h-6 text-gray-700 hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +19,6 @@
                 </a>
             </div>
 
-            <!-- Spacing between Cart and Login/Register or Orders/Dashboard -->
             <div class="ml-4 flex items-center space-x-2">
                 @if (Route::has('login'))
                     @auth
