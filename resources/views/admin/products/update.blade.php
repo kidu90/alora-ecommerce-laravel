@@ -87,16 +87,21 @@
                                     </div>
 
                                     <!-- Product Image -->
-                                    <div>
-                                        <label for="image" class="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
-                                        <input type="file" id="image" name="image" accept="image/*"
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('image') border-red-500 @enderror">
-                                        @error('image')
-                                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                        @enderror
-                                        <p class="text-sm text-gray-500 mt-1">Leave blank to keep existing image.</p>
-                                    </div>
-                                </div>
+                                    <!-- Product Image URL -->
+<div>
+    <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+    <input type="url" 
+           id="image_url" 
+           name="image_url" 
+           value="{{ old('image_url', $product->image) }}"
+           placeholder="https://example.com/image.jpg"
+           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('image_url') border-red-500 @enderror">
+    @error('image_url')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+    <p class="text-sm text-gray-500 mt-1">Optional: Use a direct image URL if no file is uploaded.</p>
+</div>
+
 
                                 <!-- Right Column -->
                                 <div class="space-y-6">

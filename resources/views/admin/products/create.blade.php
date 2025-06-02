@@ -98,9 +98,9 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Product Image -->
+                                    <!-- Product Image Upload -->
                                     <div>
-                                        <label for="image" class="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+                                        <label for="image" class="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
                                         <input type="file" 
                                                id="image" 
                                                name="image" 
@@ -109,7 +109,22 @@
                                         @error('image')
                                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                         @enderror
-                                        <p class="text-sm text-gray-500 mt-1">Accepted formats: JPEG, PNG, JPG, GIF. Max size: 2MB</p>
+                                        <p class="text-sm text-gray-500 mt-1">Optional: If uploading, this will override the image URL.</p>
+                                    </div>
+
+                                    <!-- Product Image URL -->
+                                    <div>
+                                        <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                                        <input type="url" 
+                                               id="image_url" 
+                                               name="image_url" 
+                                               value="{{ old('image_url') }}"
+                                               placeholder="https://example.com/image.jpg"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('image_url') border-red-500 @enderror">
+                                        @error('image_url')
+                                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                        <p class="text-sm text-gray-500 mt-1">Optional: Use a direct image URL if no file is uploaded.</p>
                                     </div>
                                 </div>
 

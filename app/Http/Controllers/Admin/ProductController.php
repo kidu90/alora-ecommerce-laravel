@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -31,14 +32,22 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'ingredients' => 'nullable|string',
             'usage_tips' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|url',
             'category_id' => 'required|exists:categories,id'
         ]);
 
-        $data = $request->all();
+        $data = $request->except('image_url');
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+        if ($request->filled('image_url')) {
+            try {
+                $imageContent = file_get_contents($request->image_url);
+                $extension = pathinfo(parse_url($request->image_url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+                $imageName = 'products/' . Str::random(10) . '.' . $extension;
+                Storage::disk('public')->put($imageName, $imageContent);
+                $data['image'] = $imageName;
+            } catch (\Exception $e) {
+                return back()->withErrors(['image_url' => 'Invalid image URL or failed to fetch image.']);
+            }
         }
 
         Product::create($data);
@@ -67,18 +76,26 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'ingredients' => 'nullable|string',
             'usage_tips' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|url',
             'category_id' => 'required|exists:categories,id'
         ]);
 
-        $data = $request->all();
+        $data = $request->except('image_url');
 
-        if ($request->hasFile('image')) {
-            // Delete old image
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+        if ($request->filled('image_url')) {
+            try {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+
+                $imageContent = file_get_contents($request->image_url);
+                $extension = pathinfo(parse_url($request->image_url, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+                $imageName = 'products/' . Str::random(10) . '.' . $extension;
+                Storage::disk('public')->put($imageName, $imageContent);
+                $data['image'] = $imageName;
+            } catch (\Exception $e) {
+                return back()->withErrors(['image_url' => 'Invalid image URL or failed to fetch image.']);
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
         }
 
         $product->update($data);
@@ -89,7 +106,6 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Delete image
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }

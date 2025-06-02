@@ -20,12 +20,18 @@
                 </a>
             </div>
 
-            <!-- Spacing between Cart and Login/Register -->
-            <div class="ml-4 flex items-center space-x-1">
+            <!-- Spacing between Cart and Login/Register or Orders/Dashboard -->
+            <div class="ml-4 flex items-center space-x-2">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ route('orders.index') }}" class="text-gray-700 hover:text-gray-900">Orders</a>
-                        <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-gray-900">Dashboard</a>
+                        <a href="{{ route('orders.index') }}"
+                           class="bg-gray-200 text-black px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 w-full sm:w-auto">
+                            Orders
+                        </a>
+                        <a href="{{ url('/dashboard') }}"
+                           class="bg-gray-200 text-black px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 w-full sm:w-auto">
+                            Dashboard
+                        </a>
                     @else
                         <a href="{{ route('login') }}"
                            class="bg-gray-200 text-black px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 w-full sm:w-auto">
