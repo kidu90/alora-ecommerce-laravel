@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Admin - View</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
-<body>
+<body >
     <div class="max-w-4xl mx-auto mt-10 bg-white shadow-md rounded-lg p-8">
         <!-- Product Title -->
         <div class="mb-6">
