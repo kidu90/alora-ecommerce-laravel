@@ -17,6 +17,7 @@
     @include('partials.navbar')
 
     <main class="container mx-auto px-6 py-8">
+        
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
             <div class="bg-white rounded-lg shadow-md p-6">

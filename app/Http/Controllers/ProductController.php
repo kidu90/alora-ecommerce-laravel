@@ -40,7 +40,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
