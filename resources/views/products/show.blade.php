@@ -123,7 +123,7 @@
             </div>
         </div>
         
-        @livewire('product_review', ['productId' => $product->id])
+        @livewire('product-review', ['productId' => $product->id])
     </main>
 
     @include('partials.footer')
