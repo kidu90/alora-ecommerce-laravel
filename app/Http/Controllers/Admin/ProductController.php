@@ -55,7 +55,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.update', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)

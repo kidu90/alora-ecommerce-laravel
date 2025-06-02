@@ -58,13 +58,16 @@ Route::middleware('auth')->group(function () {
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
-    
+
     // Product management
     Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
-    
+    Route::get('products/{product}/image', [App\Http\Controllers\Admin\ProductController::class, 'showImage'])->name('products.image');
+
+
+
     // Category management
     Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
-    
+
     // Order management
     Route::get('orders', [App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/{order}', [App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
