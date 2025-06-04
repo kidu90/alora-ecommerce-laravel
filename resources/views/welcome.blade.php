@@ -110,7 +110,7 @@
             @if($latestProducts->count() > 0)
                 @foreach($latestProducts as $product)
                     <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-                        <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/200x200' }}" 
+                        <img src="{{ $product->image  }}" 
                              alt="{{ $product->name }}" 
                              class="w-full h-48 object-cover rounded-lg mb-4">
                         <h3 class="text-lg font-semibold mb-2">{{ $product->name }}</h3>

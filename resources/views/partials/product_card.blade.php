@@ -27,13 +27,6 @@
             <div class="flex items-center justify-between">
                 <a href="{{ route('products.show', $product->id) }}" 
                    class="text-blue-500 hover:underline">View Details</a>
-                
-                @if($product->stock > 0)
-                    <button onclick="quickAddToCart({{ $product->id }})" 
-                            class="bg-black text-white px-3 py-1.5 rounded hover:bg-gray-800 transition">
-                        Add to Cart
-                    </button>
-                @endif
             </div>
         </div>
         @empty

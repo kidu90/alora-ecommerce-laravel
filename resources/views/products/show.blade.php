@@ -20,7 +20,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/500x500' }}" 
+                <img src="{{ $product->image }}" 
                      alt="{{ $product->name }}" 
                      class="w-full h-96 object-cover rounded-lg">
             </div>

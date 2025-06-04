@@ -3,10 +3,10 @@
         <a href="{{ route('welcome') }}" class="text-2xl font-secondary font-bold">Alora</a>
         
         <ul class="flex space-x-8">
+            <li><a href="{{ route('welcome') }}" class="hover:text-gray-600">Home</a></li>
             <li><a href="{{ route('about') }}" class="hover:text-gray-600">About</a></li>
             <li><a href="{{ route('products') }}" class="hover:text-gray-600">Shop</a></li>
             <li><a href="{{ route('contact') }}" class="hover:text-gray-600">Contact</a></li>
-            <li><a href="{{ route('subscription') }}" class="hover:text-gray-600">Subscription</a></li>
         </ul>
 
         <div class="flex items-center">
