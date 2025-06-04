@@ -1,20 +1,21 @@
-<footer class="bg-gray-100  text-black py-8">
+<footer class="bg-gray-100 text-black py-8">
     <div class="container mx-auto px-8 py-12">
         <div class="flex flex-wrap justify-between">
             <div class="w-full md:w-1/4 mb-4 md:mb-0">
                 <h2 class="text-3xl font-bold font-secondary mb-4">Alora</h2>
-                <div class="flex space-x-4">
-                    <a href="#" class="hover:text-gray-300">
-                        <image src="assets/images/facebook.svg" alt="Facebook Icon" class="h-5 w-5">
+                <div class="flex items-center gap-x-4">
+                    <a href="#" class="hover:opacity-70 transition">
+                        <img src="{{ asset('images/facebook-svgrepo-com (1).svg') }}" alt="Facebook Icon" class="w-6 h-6">
                     </a>
-                    <a href="#" class="hover:text-gray-300">
-                        <image src="assets/images/instagram.svg" alt="Instagram Icon" class="h-5 w-5">
+                    <a href="#" class="hover:opacity-70 transition">
+                        <img src="{{ asset('images/instagram-167-svgrepo-com.svg') }}" alt="Instagram Icon" class="w-6 h-6">
                     </a>
-                    <a href="#" class="hover:text-gray-300">
-                        <image src="assets/images/twitter.svg" alt="Twitter Icon" class="h-5 w-5">
+                    <a href="#" class="hover:opacity-70 transition">
+                        <img src="{{ asset('images/twitter-154-svgrepo-com.svg') }}" alt="Twitter Icon" class="w-6 h-6">
                     </a>
                 </div>
             </div>
+
             <div class="w-full md:w-1/4 mb-4 md:mb-0">
                 <h3 class="text-lg font-semibold mb-2">Company</h3>
                 <ul>
