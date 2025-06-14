@@ -63,6 +63,37 @@ class ProductController extends Controller
         return response()->json(null, 204);
     }
 
+
+    // Filter products by category
+    public function filterByCategory($categoryId)
+    {
+        $products = Product::with('category')
+            ->where('category_id', $categoryId)
+            ->get();
+
+        return response()->json($products);
+    }
+
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        if (!$query) {
+            return response()->json(['message' => 'Search query is required.'], 400);
+        }
+
+        $products = Product::with('category')
+            ->where('name', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->get();
+
+        return response()->json($products);
+    }
+
+
+
+
     // Web routes
     public function webIndex()
     {
